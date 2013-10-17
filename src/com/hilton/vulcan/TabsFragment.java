@@ -1,5 +1,6 @@
 package com.hilton.vulcan;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -9,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TabHost;
 import android.widget.TabHost.OnTabChangeListener;
 import android.widget.TabHost.TabContentFactory;
@@ -20,15 +22,23 @@ public class TabsFragment extends Fragment {
     private static final String PREFS = "default_prefs";
     private static final String CURRENT_TAB = "current_tab";
     private Tab[] mTabs = new Tab[] {
-	    new Tab("Tab 1"),
-	    new Tab("Tab 2"),
-	    new Tab("Tab 3"),
-	    new Tab("Tab 4"),
-	    new Tab("Tab 5")
+	    new Tab("Tab 1", "Home", R.drawable.home),
+	    new Tab("Tab 2", "Bookmarks", R.drawable.favorite_bookmark),
+	    new Tab("Tab 3", "Favorites", R.drawable.star),
+	    new Tab("Tab 4", "Users", R.drawable.user),
+	    new Tab("Tab 5", "Bastkets", R.drawable.shopping_basket)
     };
     
     private TabHost mTabHost;
+    private LayoutInflater mFactory;
     
+
+    @Override
+    public void onAttach(Activity activity) {
+	super.onAttach(activity);
+	mFactory = LayoutInflater.from(activity);
+    }
+
     @Override
     public void onDestroy() {
 	super.onDestroy();
@@ -62,12 +72,17 @@ public class TabsFragment extends Fragment {
 	tabHost.setup();
 	for (final Tab tab : mTabs) {
 	    TabSpec spec = tabHost.newTabSpec(tab.mTag);
-	    spec.setIndicator(tab.mTag);
+	    View indicator = mFactory.inflate(R.layout.tab_indicator, null, false);
+	    ImageView icon = (ImageView) indicator.findViewById(R.id.tab_icon);
+	    icon.setImageResource(tab.mIcon);
+	    TextView title = (TextView) indicator.findViewById(R.id.tab_title);
+	    title.setText(tab.mTitle);
+	    spec.setIndicator(indicator);
 	    spec.setContent(new TabContentFactory() {
 		@Override
 		public View createTabContent(String tag) {
 		    TextView tv =  new TextView(getActivity());
-		    tv.setText(tab.mTag);
+		    tv.setText(tab.mTitle);
 		    return tv;
 		}
 		
@@ -84,9 +99,13 @@ public class TabsFragment extends Fragment {
     
     private class Tab {
 	public String mTag;
+	public String mTitle;
+	public int mIcon;
 	
-	public Tab(final String tag) {
+	public Tab(final String tag, String title, int icon) {
 	    mTag = tag;
+	    mTitle = title;
+	    mIcon = icon;
 	}
 	
 	@Override
