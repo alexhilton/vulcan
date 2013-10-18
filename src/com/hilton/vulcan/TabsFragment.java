@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
@@ -98,6 +99,15 @@ public class TabsFragment extends Fragment {
         tabHost.setOnTabChangedListener(new OnTabChangeListener() {
             @Override
             public void onTabChanged(String tabId) {
+                Fragment oldFrag = getFragmentManager().findFragmentByTag(tabId);
+                if (oldFrag != null) {
+                    FragmentTransaction ft = getFragmentManager().beginTransaction();
+                    ft.remove(oldFrag);
+                    ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
+                    ft.commit();
+                    getFragmentManager().executePendingTransactions();
+                }
+                SystemClock.sleep(100);
                 final int current = tabHost.getCurrentTab();
                 Fragment frag = new FragmentTab();
                 Bundle args = new Bundle();
