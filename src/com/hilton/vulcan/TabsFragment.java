@@ -76,6 +76,7 @@ public class TabsFragment extends Fragment {
             frag.setArguments(args);
             FragmentTransaction ft = getFragmentManager().beginTransaction();
             ft.replace(mTabs[current].mStub, frag, mTabs[current].mTag);
+            ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
             ft.commit();
         }
     }
@@ -106,6 +107,7 @@ public class TabsFragment extends Fragment {
                     frag.setArguments(args);
                     FragmentTransaction ft = getFragmentManager().beginTransaction();
                     ft.replace(mTabs[current].mStub, frag, tabId);
+                    ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
                     ft.commit();
                 }
             }
