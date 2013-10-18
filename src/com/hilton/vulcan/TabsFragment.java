@@ -98,18 +98,15 @@ public class TabsFragment extends Fragment {
         tabHost.setOnTabChangedListener(new OnTabChangeListener() {
             @Override
             public void onTabChanged(String tabId) {
-                Fragment frag = getFragmentManager().findFragmentByTag(tabId);
                 final int current = tabHost.getCurrentTab();
-                if (frag == null) {
-                    frag = new FragmentTab();
-                    Bundle args = new Bundle();
-                    args.putString(FragmentTab.EXTRA_TITLE, mTabs[current].mTitle);
-                    frag.setArguments(args);
-                    FragmentTransaction ft = getFragmentManager().beginTransaction();
-                    ft.replace(mTabs[current].mStub, frag, tabId);
-                    ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-                    ft.commit();
-                }
+                Fragment frag = new FragmentTab();
+                Bundle args = new Bundle();
+                args.putString(FragmentTab.EXTRA_TITLE, mTabs[current].mTitle);
+                frag.setArguments(args);
+                FragmentTransaction ft = getFragmentManager().beginTransaction();
+                ft.replace(mTabs[current].mStub, frag, tabId);
+                ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+                ft.commit();
             }
         });
     }
