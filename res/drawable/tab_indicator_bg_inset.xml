@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<inset xmlns:android="http://schemas.android.com/apk/res/android"
+    android:drawable="@drawable/tab_indicator_bg_focused"
+    android:insetLeft="@dimen/tab_indicator_focus_padding"
+    android:insetTop="@dimen/tab_indicator_focus_padding"
+    android:insetRight="@dimen/tab_indicator_focus_padding"
+    android:insetBottom="@dimen/tab_indicator_focus_padding" />

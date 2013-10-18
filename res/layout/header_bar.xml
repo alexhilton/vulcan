@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="@dimen/header_bar_height"
     android:background="@drawable/header_bar_bg"
     android:layout_gravity="center_vertical"
     android:gravity="center_vertical"
@@ -23,7 +23,11 @@
         android:layout_height="wrap_content"
         android:background="@drawable/menu_bg"
         android:layout_gravity="right|center_vertical"
+        android:clickable="true"
         style="@style/header_bar_menu"
-        android:padding="5dip"
+        android:paddingTop="3dip"
+        android:paddingBottom="3dip"
+        android:paddingLeft="7dip"
+        android:paddingRight="7dip"
         android:text="Menu" />
 </FrameLayout>

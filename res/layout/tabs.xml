@@ -38,6 +38,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:showDividers="none"
+            android:background="@drawable/tab_indicator_bg_normal"
             android:layout_weight="0" >
         </TabWidget>
     </LinearLayout>
