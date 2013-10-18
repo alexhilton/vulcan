@@ -20,8 +20,7 @@
             android:id="@android:id/tabs"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:showDividers="middle"
-            android:divider="@drawable/tab_divider"
+            android:showDividers="none"
             android:layout_weight="0" >
         </TabWidget>
     </LinearLayout>
