@@ -7,6 +7,7 @@ import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -66,50 +67,44 @@ public class TabsFragment extends Fragment {
                 Context.MODE_PRIVATE);
         final int current = sp.getInt(CURRENT_TAB, 0);
         mTabHost.setCurrentTab(current);
-        final String currentTag = mTabHost.getCurrentTabTag();
-        android.util.Log.e(TAG, " tag is " + currentTag);
-        Fragment frag = getFragmentManager().findFragmentByTag(currentTag);
-        if (frag == null) {
-            frag = new FragmentTab();
-            Bundle args = new Bundle();
-            args.putString(FragmentTab.EXTRA_TITLE, mTabs[current].mTitle);
-            frag.setArguments(args);
-            FragmentTransaction ft = getFragmentManager().beginTransaction();
-            ft.replace(mTabs[current].mStub, frag, mTabs[current].mTag);
-            ft.commit();
-        }
     }
 
     private void setupTabs(final TabHost tabHost) {
         tabHost.setup();
         for (final Tab tab : mTabs) {
-            TabSpec spec = tabHost.newTabSpec(tab.mTag);
-            View indicator = mFactory.inflate(R.layout.tab_indicator, null,
-                    false);
-            ImageView icon = (ImageView) indicator.findViewById(R.id.tab_icon);
-            icon.setImageResource(tab.mIcon);
-            TextView title = (TextView) indicator.findViewById(R.id.tab_title);
-            title.setText(tab.mTitle);
-            spec.setIndicator(indicator);
-            spec.setContent(tab.mStub);
+            TabSpec spec = createTab(tabHost, tab);
             tabHost.addTab(spec);
+            attachFragment(tab);
         }
         tabHost.setOnTabChangedListener(new OnTabChangeListener() {
             @Override
             public void onTabChanged(String tabId) {
-                Fragment frag = getFragmentManager().findFragmentByTag(tabId);
-                final int current = tabHost.getCurrentTab();
-                if (frag == null) {
-                    frag = new FragmentTab();
-                    Bundle args = new Bundle();
-                    args.putString(FragmentTab.EXTRA_TITLE, mTabs[current].mTitle);
-                    frag.setArguments(args);
-                    FragmentTransaction ft = getFragmentManager().beginTransaction();
-                    ft.replace(mTabs[current].mStub, frag, tabId);
-                    ft.commit();
-                }
+                Log.e(TAG, "which is showing ? tab id " + tabId);
             }
         });
+    }
+
+    private void attachFragment(final Tab tab) {
+        Fragment frag = new FragmentTab();
+        Bundle args = new Bundle();
+        args.putString(FragmentTab.EXTRA_TITLE, tab.mTitle);
+        frag.setArguments(args);
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        ft.replace(tab.mStub, frag, tab.mTag);
+        ft.commit();
+    }
+
+    private TabSpec createTab(final TabHost tabHost, final Tab tab) {
+        TabSpec spec = tabHost.newTabSpec(tab.mTag);
+        View indicator = mFactory.inflate(R.layout.tab_indicator, null,
+                false);
+        ImageView icon = (ImageView) indicator.findViewById(R.id.tab_icon);
+        icon.setImageResource(tab.mIcon);
+        TextView title = (TextView) indicator.findViewById(R.id.tab_title);
+        title.setText(tab.mTitle);
+        spec.setIndicator(indicator);
+        spec.setContent(tab.mStub);
+        return spec;
     }
 
     private class Tab {
